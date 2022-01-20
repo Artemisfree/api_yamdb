@@ -1,10 +1,17 @@
 from django.db import models
 
 """ from user.models import User """
-from title.models import Title
+""" from title.models import Title """
 
 
 SCORE = [(i, i) for i in range(11)]
+
+
+class Title(models.Model):
+    name = models.CharField(max_length=100, default=None)
+
+    def __str__(self):
+        return self.name
 
 
 class Review(models.Model):

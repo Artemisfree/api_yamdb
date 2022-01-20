@@ -32,8 +32,8 @@ class CommentSerializer(serializers.ModelSerializer):
             id=review_id,
             title_id=title_id
         ).exists():
-            raise serializers.NotFound()
-        return data
+            return data
+        raise serializers.NotFound()
 
     class Meta:
         fields = 'id', 'text', 'author', 'pub_date'
