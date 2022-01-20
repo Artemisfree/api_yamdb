@@ -5,13 +5,13 @@ from rest_framework.pagination import PageNumberPagination
 from api.serializers import ReviewSerializer, CommentSerializer
 
 from reviews.models import Review, Title
-from api.permissions import IsOwnreOrModeratorOrAdminOrReadOnly
+from api.permissions import IsOwnerOrModeratorOrAdminOrReadOnly
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     pagination_class = PageNumberPagination
-    permission_classes = [IsOwnreOrModeratorOrAdminOrReadOnly]
+    permission_classes = [IsOwnerOrModeratorOrAdminOrReadOnly]
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
@@ -35,7 +35,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     pagination_class = PageNumberPagination
-    permission_classes = [IsOwnreOrModeratorOrAdminOrReadOnly]
+    permission_classes = [IsOwnerOrModeratorOrAdminOrReadOnly]
 
     def get_queryset(self):
         review_id = self.kwargs.get('review_id')
