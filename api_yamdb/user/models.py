@@ -9,8 +9,9 @@ class User(AbstractUser):
         "user",
     )
     role = models.CharField(max_length=150, choices=ROLE, default="user")
-    username = models.CharField(max_length=100, unique=True)
-    description = models.TextField('user_description', blank=True)
+    username = models.CharField(max_length=150, unique=True)
+    bio = models.TextField('bio', blank=True)
+    email = models.EmailField(max_length=254, unique=True)
 
     class Meta:
         verbose_name_plural = 'users'
