@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django_filters',
     'users',
     'djoser',
+    'api.apps.ApiConfig',
 ]
 
 REST_FRAMEWORK = {
