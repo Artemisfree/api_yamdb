@@ -1,3 +1,4 @@
+from cgitb import lookup
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
@@ -88,6 +89,7 @@ class UserAPIView(APIView):
 class AdminViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = AdminSerializer
+    lookup_field = 'username'
     permission_class = (permissions.IsAdmin)
     filter_backends = (DjangoFilterBackend,)
     search_fields = ('username',)

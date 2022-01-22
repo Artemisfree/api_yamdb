@@ -9,6 +9,9 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
 
     class Meta:
         fields = (
@@ -21,6 +24,12 @@ class UserSerializer(serializers.ModelSerializer):
             'last_name',
         )
         model = User
+        read_only_fields = ('role',)
+
+    def validate_username(self, value):
+        if value == RESERVED_NAME:
+            raise serializers.ValidationError(ATTANTION_RESERVED_NAME)
+        return value
 
 
 class TokenSerializer(serializers.Serializer):
