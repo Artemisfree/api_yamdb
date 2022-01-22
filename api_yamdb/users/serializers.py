@@ -1,5 +1,6 @@
 from rest_framework import serializers, exceptions
 from rest_framework.validators import UniqueValidator
+from django.db.models import Avg
 
 from api_yamdb.settings import (ATTANTION_RESERVED_NAME,
                                 NAME_NOT_FOUND,
@@ -32,22 +33,9 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
 
-class TokenSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=200, required=True)
-    confirmation_code = serializers.CharField(max_length=200, required=True)
-
-    def validation(self, value):
-        if value == RESERVED_NAME:
-            raise serializers.ValidationError(ATTANTION_RESERVED_NAME)
-        if not User.objects.filter(username=value).exists():
-            raise exceptions.NotFound(NAME_NOT_FOUND)
-        return value
-
-
 class AdminSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-        validators=[UniqueValidator(queryset=User.objects.all())]
-    )
+        validators=[UniqueValidator(queryset=User.objects.all())])
 
     class Meta:
         model = User
@@ -64,3 +52,37 @@ class AdminSerializer(serializers.ModelSerializer):
         if value == RESERVED_NAME:
             raise serializers.ValidationError(ATTANTION_RESERVED_NAME)
         return value
+
+
+class TokenSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=200, required=True)
+    confirmation_code = serializers.CharField(max_length=200, required=True)
+
+    def validation(self, value):
+        if value == RESERVED_NAME:
+            raise serializers.ValidationError(ATTANTION_RESERVED_NAME)
+        if not User.objects.filter(username=value).exists():
+            raise exceptions.NotFound(NAME_NOT_FOUND)
+        return value
+
+
+# class AdminSerializer(serializers.ModelSerializer):
+#     email = serializers.EmailField(
+#         validators=[UniqueValidator(queryset=User.objects.all())]
+#     )
+
+#     class Meta:
+#         model = User
+#         fields = (
+#             'role',
+#             'username',
+#             'bio',
+#             'email',
+#             'first_name',
+#             'last_name',
+#         )
+
+#     def validate_username(self, value):
+#         if value == RESERVED_NAME:
+#             raise serializers.ValidationError(ATTANTION_RESERVED_NAME)
+#         return value

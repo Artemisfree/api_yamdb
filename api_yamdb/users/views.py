@@ -1,16 +1,15 @@
-from cgitb import lookup
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status, viewsets
+from rest_framework import filters, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import AccessToken
 
 from api_yamdb.settings import DEFAULT_FROM_EMAIL
-
 from api import permissions
 
 from .models import User
@@ -51,15 +50,12 @@ class TokenAPIView(APIView):
         serializer = TokenSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = get_object_or_404(
-                User, username=serializer.data['username']
-            )
+                User, username=serializer.data['username'])
             if default_token_generator.check_token(
-                user, serializer.data['confirmation_code']
-            ):
+               user, serializer.data['confirmation_code']):
                 token = AccessToken.for_user(user)
                 return Response(
-                    {'token': str(token)}, status=status.HTTP_200_OK
-                )
+                    {'token': str(token)}, status=status.HTTP_200_OK)
             return Response(
                 {'confirmation code': 'Неверный код подтверждения'},
                 status=status.HTTP_400_BAD_REQUEST
@@ -67,13 +63,13 @@ class TokenAPIView(APIView):
 
 
 class UserAPIView(APIView):
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         user = get_object_or_404(User, username=request.user.username)
         serializer = UserSerializer(user, many=False)
         return Response(serializer.data)
 
-    def patch(self, request):
-        user = user = get_object_or_404(User, username=request.user.username)
+    def patch(self, request, *args, **kwargs):
+        user = get_object_or_404(User, username=request.user.username)
         serializer = UserSerializer(
             user,
             data=request.data,
@@ -86,10 +82,10 @@ class UserAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AdminViewSet(viewsets.ModelViewSet):
+class AdminViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = AdminSerializer
     lookup_field = 'username'
     permission_class = (permissions.IsAdmin)
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)
