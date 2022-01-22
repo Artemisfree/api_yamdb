@@ -44,7 +44,7 @@ class TokenSerializer(serializers.Serializer):
         return value
 
 
-class AdminSerializer(serializers.Serializer):
+class AdminSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=User.objects.all())]
     )

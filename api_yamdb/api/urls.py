@@ -25,8 +25,7 @@ router.register(r'users', AdminViewSet, basename='users')
 
 
 urlpatterns = [
-    path('v1/', include(router.urls)),
     path('v1/auth/', include('users.urls')),
     path('v1/users/me/', UserAPIView.as_view(), name='me'),
-    # path('v1/users/', include(router.urls)),
+    path('v1/', include(router.urls)),
 ]
