@@ -3,6 +3,7 @@ from rest_framework import routers
 
 from api.views import CategoryViewSet, GenreViewSet, TitleViewSet, \
     ReviewViewSet, CommentViewSet
+from users.views import AdminViewSet
 
 
 router = routers.DefaultRouter()
@@ -23,4 +24,6 @@ router.register(r'titles', TitleViewSet)
 
 urlpatterns = [
     path('v1/', include(router.urls)),
+    path('v1/auth/', include('users.urls')),
+    path('v1/users/', AdminViewSet),
 ]

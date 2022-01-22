@@ -20,7 +20,7 @@ def conf_code_to_email(username):
         subject='Confirmation',
         message=f'Your code is {confirmation_code}',
         from_email=DEFAULT_FROM_EMAIL,
-        recipient_list=UserSerializer.data['email'],
+        recipient_list=(user.email,),
         fail_silently=False,
     )
 

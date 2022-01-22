@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import User
+
 
 """ from user.models import User """
 
@@ -58,11 +60,11 @@ class Title(models.Model):
 
 class Review(models.Model):
     text = models.TextField(max_length=255)
-    """ author = models.ForeignKey(
+    author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='reviews'
-    ) """
+    )
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
