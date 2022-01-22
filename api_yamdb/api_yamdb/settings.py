@@ -137,3 +137,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
 DEFAULT_FROM_EMAIL = 'api_yamdb_conf@ya.ru'
+
+
+RESERVED_NAME = 'me'
+ATTANTION_RESERVED_NAME = '"me" нельзя использовать как имя пользователя!'
+NAME_NOT_FOUND = 'Пользователя с таким именем нет'

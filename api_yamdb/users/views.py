@@ -6,11 +6,14 @@ from rest_framework import status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import AccessToken
 
 from api_yamdb.settings import DEFAULT_FROM_EMAIL
 
+from api import permissions
+
 from .models import User
-from .serializers import UserSerializer
+from .serializers import AdminSerializer, UserSerializer, TokenSerializer
 
 
 def conf_code_to_email(username):
@@ -25,26 +28,66 @@ def conf_code_to_email(username):
     )
 
 
-class AdminViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    # пока не знаю, что писать
-    # serializer_class = ?
-    # permission_class = ?
-    filter_backends = (DjangoFilterBackend,)
-    search_fields = ('username',)
-
-
-class SignUp(APIView):
+class SignUpAPIView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            # создаем confirmation code и отправляем на почту
             conf_code_to_email(serializer.data['username'])
             return Response(
                 {'email': serializer.data['email'],
                  'username': serializer.data['username']},
                 status=status.HTTP_200_OK
             )
+
+
+class TokenAPIView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        serializer = TokenSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user = get_object_or_404(
+                User, username=serializer.data['username']
+            )
+            if default_token_generator.check_token(
+                user, serializer.data['confirmation_code']
+            ):
+                token = AccessToken.for_user(user)
+                return Response(
+                    {'token': str(token)}, status=status.HTTP_200_OK
+                )
+            return Response(
+                {'confirmation code': 'Неверный код подтверждения'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class UserAPIView(APIView):
+    def get(self, request):
+        user = get_object_or_404(User, username=request.user.username)
+        serializer = UserSerializer(user, many=False)
+        return Response(serializer.data)
+
+    def patch(self, request):
+        user = user = get_object_or_404(User, username=request.user.username)
+        serializer = UserSerializer(
+            user,
+            data=request.data,
+            partial=True,
+            many=False
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AdminViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = AdminSerializer
+    permission_class = (permissions.IsAdmin)
+    filter_backends = (DjangoFilterBackend,)
+    search_fields = ('username',)
