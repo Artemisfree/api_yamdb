@@ -11,8 +11,7 @@ class CustomUserManager(UserManager):
         if username == RESERVED_NAME:
             raise ValueError(ATTANTION_RESERVED_NAME)
         return super().create_user(
-            username, email=email, password=password, **extra_fields
-        )
+            username, email=email, password=password, **extra_fields)
 
     def create_superuser(
             self, username, email, password, role='admin', **extra_fields):
