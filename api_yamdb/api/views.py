@@ -1,3 +1,4 @@
+from venv import create
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, viewsets, mixins
@@ -7,7 +8,7 @@ from api.serializers import ReviewSerializer, CommentSerializer
 from api.permissions import IsOwnerOrModeratorOrAdminOrReadOnly
 from reviews.models import Category, Genre, Title, Review
 from .permissions import AdminOrReadOnly
-from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer)
+from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer, TitleSerializerCreate)
 
 
 class ListCreateDestroyMixin(mixins.ListModelMixin, mixins.CreateModelMixin,
@@ -42,6 +43,11 @@ class TitleViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     pagination_class = PageNumberPagination
     filterset_fields = ('category', 'genre', 'name', 'year')
+
+    def get_serializer_class(self):
+        if self.action in ('create', 'partial_update'):
+            return TitleSerializerCreate
+        return TitleSerializer
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

@@ -10,7 +10,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ('name', 'slug')
         lookup_field = 'slug'
 
 
@@ -18,7 +18,7 @@ class GenreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Genre
-        fields = '__all__'
+        fields = ('name', 'slug')
         lookup_field = 'slug'
 
 
@@ -29,13 +29,30 @@ class TitleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Title
-        fields = '__all__'
+        fields = ('id', 'name', 'description', 'year', 'category',
+                 'genre', 'rating')
+        read_only_fields = ('id', )
 
     def get_rating_from_review(self, obj):
         score_avg = obj.reviews.aggregate(Avg('score'))['score__avg']
         if score_avg is not None:
             return int(score_avg)
         return None
+
+
+class TitleSerializerCreate(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(
+        slug_field='slug', queryset=Category.objects.all()
+        )
+    genre = serializers.SlugRelatedField(
+        slug_field='slug', queryset=Genre.objects.all(),
+        many=True
+        )
+
+    class Meta:
+        model = Title
+        fields = ('id', 'name', 'description', 'year', 'category',
+                 'genre', 'rating')
 
 
 class ReviewSerializer(serializers.ModelSerializer):
