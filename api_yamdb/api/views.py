@@ -1,6 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
-from rest_framework import filters, viewsets
+from rest_framework import filters, viewsets, mixins
 from rest_framework.pagination import PageNumberPagination
 
 from api.serializers import ReviewSerializer, CommentSerializer
@@ -10,20 +10,29 @@ from .permissions import AdminOrReadOnly
 from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer)
 
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class ListCreateDestroyMixin(mixins.ListModelMixin, mixins.CreateModelMixin,
+                            mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    pass
+
+
+class CategoryViewSet(ListCreateDestroyMixin):
     permission_classes = [AdminOrReadOnly]
+    pagination_class = PageNumberPagination
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = [filters.SearchFilter, ]
     search_fields = ['name', ]
+    lookup_field = 'slug'
 
 
-class GenreViewSet(viewsets.ReadOnlyModelViewSet):
+class GenreViewSet(ListCreateDestroyMixin):
     permission_classes = [AdminOrReadOnly]
+    pagination_class = PageNumberPagination
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     filter_backends = [filters.SearchFilter, ]
     search_fields = ['name', ]
+    lookup_field = 'slug'
 
 
 class TitleViewSet(viewsets.ModelViewSet):
@@ -31,7 +40,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
     filter_backends = (DjangoFilterBackend,)
-    pagination_class = None
+    pagination_class = PageNumberPagination
     filterset_fields = ('category', 'genre', 'name', 'year')
 
 
