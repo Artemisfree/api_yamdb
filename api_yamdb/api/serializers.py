@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 from django.http import Http404
+from django.db.models import Avg
 
 from reviews.models import Category, Genre, Title, Comment, Review
 
@@ -22,10 +23,19 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class TitleSerializer(serializers.ModelSerializer):
+    rating = serializers.SerializerMethodField('get_rating_from_review')
+    category = CategorySerializer(read_only=True)
+    genre = GenreSerializer(many=True, read_only=True)
 
     class Meta:
         model = Title
         fields = '__all__'
+
+    def get_rating_from_review(self, obj):
+        score_avg = obj.reviews.aggregate(Avg('score'))['score__avg']
+        if score_avg is not None:
+            return int(score_avg)
+        return None
 
 
 class ReviewSerializer(serializers.ModelSerializer):

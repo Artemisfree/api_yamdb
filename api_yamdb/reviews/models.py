@@ -46,7 +46,7 @@ class Title(models.Model):
         ('9', '9'),
         ('10', '10')
     ]
-    rating = models.CharField(max_length=2, choices=GRADES, default=0)
+    rating = models.IntegerField(null=True, default=None)
 
     def __str__(self):
         return self.title
