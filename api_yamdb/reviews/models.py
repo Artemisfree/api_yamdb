@@ -2,13 +2,7 @@ from django.db import models
 
 from users.models import User
 
-
-""" from user.models import User """
-
-
 SCORE = [(i, i) for i in range(11)]
-
-# без жанра и категории
 
 
 class Category(models.Model):
@@ -70,8 +64,8 @@ class Review(models.Model):
         on_delete=models.CASCADE,
         related_name='reviews'
     )
-    score = models.IntegerField(max_length=2, choices=SCORE)
-    pud_date = models.DateField(auto_now_add=True)
+    score = models.IntegerField(choices=SCORE)
+    pub_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         constraints = [
@@ -86,17 +80,17 @@ class Review(models.Model):
 
 class Comment(models.Model):
     text = models.TextField(max_length=255)
-    """ author = models.ForeignKey(
+    author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='reviews'
-    ) """
+        related_name='comments'
+    )
     review = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
         related_name='comments'
     )
-    pud_date = models.DateField(auto_now_add=True)
+    pub_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.text

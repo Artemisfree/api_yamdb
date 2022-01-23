@@ -11,7 +11,7 @@ from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer)
 
 
 class ListCreateDestroyMixin(mixins.ListModelMixin, mixins.CreateModelMixin,
-                            mixins.DestroyModelMixin, viewsets.GenericViewSet):
+                             mixins.DestroyModelMixin, viewsets.GenericViewSet):
     pass
 
 

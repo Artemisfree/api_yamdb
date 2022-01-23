@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
+from django.http import Http404
 
 from reviews.models import Category, Genre, Title, Comment, Review
 
@@ -31,13 +32,14 @@ class ReviewSerializer(serializers.ModelSerializer):
     author = SlugRelatedField(slug_field='username', read_only=True)
 
     def validate(self, data):
-        title_id = self.context['view'].kwargs.get('title_id')
-        user = self.context['request'].user
-        if Review.objects.filter(
-            user=user,
-            title_id=title_id
-        ).exists():
-            raise serializers.ValidationError("400 Bad Request")
+        if (self.context['request'].method == 'POST'):
+            title_id = self.context['view'].kwargs.get('title_id')
+            user = self.context['request'].user
+            if Review.objects.filter(
+                author=user,
+                title_id=title_id
+            ).exists():
+                raise serializers.ValidationError("400 Bad Request")
         return data
 
     class Meta:
@@ -56,7 +58,7 @@ class CommentSerializer(serializers.ModelSerializer):
             title_id=title_id
         ).exists():
             return data
-        raise serializers.NotFound()
+        raise Http404
 
     class Meta:
         fields = 'id', 'text', 'author', 'pub_date'
