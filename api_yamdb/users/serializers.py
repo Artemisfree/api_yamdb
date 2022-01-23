@@ -1,7 +1,7 @@
 from rest_framework import serializers, exceptions
 from rest_framework.validators import UniqueValidator
 
-from api_yamdb.settings import (ATTANTION_RESERVED_NAME,
+from api_yamdb.settings import (ATTENTION_RESERVED_NAME,
                                 NAME_NOT_FOUND,
                                 RESERVED_NAME)
 
@@ -28,7 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate_username(self, value):
         if value == RESERVED_NAME:
-            raise serializers.ValidationError(ATTANTION_RESERVED_NAME)
+            raise serializers.ValidationError(ATTENTION_RESERVED_NAME)
         return value
 
 
@@ -49,7 +49,7 @@ class AdminSerializer(serializers.ModelSerializer):
 
     def validate_username(self, value):
         if value == RESERVED_NAME:
-            raise serializers.ValidationError(ATTANTION_RESERVED_NAME)
+            raise serializers.ValidationError(ATTENTION_RESERVED_NAME)
         return value
 
 
@@ -59,7 +59,7 @@ class TokenSerializer(serializers.Serializer):
 
     def validation(self, value):
         if value == RESERVED_NAME:
-            raise serializers.ValidationError(ATTANTION_RESERVED_NAME)
+            raise serializers.ValidationError(ATTENTION_RESERVED_NAME)
         if not User.objects.filter(username=value).exists():
             raise exceptions.NotFound(NAME_NOT_FOUND)
         return value

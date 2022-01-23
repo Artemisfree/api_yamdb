@@ -21,7 +21,7 @@ router.register(
     basename='Comments'
 )
 router.register(r'titles', TitleViewSet)
-router.register(r'users', AdminViewSet, basename='users')
+router.register(r'users', AdminViewSet)
 
 
 urlpatterns = [

@@ -37,9 +37,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend'
-    ],
+    # 'DEFAULT_FILTER_BACKENDS': [
+    #     'django_filters.rest_framework.DjangoFilterBackend'
+    # ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 }
@@ -138,5 +138,5 @@ DEFAULT_FROM_EMAIL = 'api_yamdb_conf@ya.ru'
 
 
 RESERVED_NAME = 'me'
-ATTANTION_RESERVED_NAME = '"me" нельзя использовать как имя пользователя!'
+ATTENTION_RESERVED_NAME = '"me" нельзя использовать как имя пользователя!'
 NAME_NOT_FOUND = 'Пользователя с таким именем нет'

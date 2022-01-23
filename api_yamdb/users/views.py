@@ -86,6 +86,6 @@ class AdminViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = AdminSerializer
     lookup_field = 'username'
-    permission_classes = (permissions.IsAdmin, )
+    permission_classes = (permissions.IsAdmin,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)
