@@ -1,4 +1,3 @@
-from venv import create
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, viewsets, mixins
@@ -9,11 +8,16 @@ from api.permissions import IsOwnerOrModeratorOrAdminOrReadOnly
 from api.filters import TitleFilter
 from reviews.models import Category, Genre, Title, Review
 from .permissions import AdminOrReadOnly
-from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer, TitleSerializerCreate)
+from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer,
+                          TitleSerializerCreate)
 
 
-class ListCreateDestroyMixin(mixins.ListModelMixin, mixins.CreateModelMixin,
-                             mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class ListCreateDestroyMixin(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet
+):
     pass
 
 

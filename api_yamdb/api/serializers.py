@@ -42,17 +42,16 @@ class TitleSerializer(serializers.ModelSerializer):
 
 class TitleSerializerCreate(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(
-        slug_field='slug', queryset=Category.objects.all()
-        )
+        slug_field='slug', queryset=Category.objects.all())
     genre = serializers.SlugRelatedField(
         slug_field='slug', queryset=Genre.objects.all(),
-        many=True
-        )
+        many=True)
 
     class Meta:
         model = Title
         fields = ('id', 'name', 'year', 'description', 'genre', 'category',
                   'rating')
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     author = SlugRelatedField(slug_field='username', read_only=True)
