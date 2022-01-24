@@ -29,8 +29,8 @@ class TitleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Title
-        fields = ('id', 'name', 'description', 'year', 'category',
-                 'genre', 'rating')
+        fields = ('id', 'name', 'year', 'description', 'genre', 'category',
+                  'rating')
         read_only_fields = ('id', )
 
     def get_rating_from_review(self, obj):
@@ -51,9 +51,8 @@ class TitleSerializerCreate(serializers.ModelSerializer):
 
     class Meta:
         model = Title
-        fields = ('id', 'name', 'description', 'year', 'category',
-                 'genre', 'rating')
-
+        fields = ('id', 'name', 'year', 'description', 'genre', 'category',
+                  'rating')
 
 class ReviewSerializer(serializers.ModelSerializer):
     author = SlugRelatedField(slug_field='username', read_only=True)
