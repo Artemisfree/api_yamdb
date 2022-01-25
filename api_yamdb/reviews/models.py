@@ -68,14 +68,14 @@ class Review(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
-                fields=['author', 'title'], name='unique review'
+                fields=('author', 'title'), name='unique review'
             ),
-        ]
+        )
 
     def __str__(self):
-        return self.text
+        return self.title
 
 
 class Comment(models.Model):
@@ -93,4 +93,4 @@ class Comment(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.text
+        return self.title
