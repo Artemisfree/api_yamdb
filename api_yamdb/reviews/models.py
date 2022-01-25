@@ -75,7 +75,9 @@ class Review(models.Model):
         )
 
     def __str__(self):
-        return self.title
+        return (self.author.username
+                + ' - ' + self.text[:15]
+                + ' - ' + str(self.score))
 
 
 class Comment(models.Model):
@@ -93,4 +95,6 @@ class Comment(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return (str(self.pub_date.date())
+                + ' - ' + self.author.username
+                + ' - ' + self.text[:15])
