@@ -1,4 +1,3 @@
-from cgi import print_directory
 import os
 from datetime import timedelta
 
@@ -12,12 +11,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv('TOP_SECRET')
 # SECRET_KEY = 'p&l%385148kslhtyn^##a1)ilz@4zqj=rq&agdol^##zgl9(vs'
 # print(SECRET_KEY)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 # ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = os.getenv('SECRET_ALLOWED_HOSTS')
-
+# print(ALLOWED_HOSTS)
 
 # Application definition
 
