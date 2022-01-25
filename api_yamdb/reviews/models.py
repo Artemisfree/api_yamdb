@@ -27,12 +27,12 @@ class Title(models.Model):
     description = models.TextField(default=None)
     genre = models.ManyToManyField(
         Genre,
-        related_name="titles", blank=True, null=True
+        related_name='titles', blank=True, null=True
     )
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
-        related_name="titles", blank=True, null=True
+        related_name='titles', blank=True, null=True
     )
     GRADES = [
         ('1', '1'),
