@@ -1,30 +1,18 @@
 import os
 from datetime import timedelta
 
-# from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'p&l%385148kslhtyn^##a1)ilz@4zqj=rq&agdol^##zgl9(vs'
-# SECRET_KEY = config('SECRET_KEY')
-# SECRET_KEY = os.getenv('TOP_SECRET')
-# Артем, какая-то фигня! Через dotenv и decouple не работает.
-# dotenv
-# Сделал, как в теории, но почему-то не работает.
-# Проверил через принт - все ок, но тесты яндекса не видят.
-# Нагуглил, что в скобки можно добавить так: SECRET_KEY = os.getenv('TOP_SECRET', 'local')
-# Но так падают тесты на сервере
-# decouple
-# Тесты яндекса говорят: ImportError: No module named 'decouple'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-# ALLOWED_HOSTS = config('ALLOWED_HOSTS')
-# ALLOWED_HOSTS = os.getenv('SECRET_ALLOWED_HOSTS')
 
 # Application definition
 
